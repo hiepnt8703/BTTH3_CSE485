@@ -1,5 +1,5 @@
 <?php
-require_once 'database.php';
+require_once 'Database.php';
 session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
@@ -9,11 +9,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        $_SESSION['user_id'] = $user['id'];
-        header("Location: Dashboard.php");
-        exit();
+        if($_SESSION['user_id'] == $user['id']){
+            header("Location: Dashboard.php");
+            exit();
+        }else{
+            $error = "User invalid";
+            header("Location:index.php?error=$error");
+        }
+        
     } else {
-        echo "Đăng nhập không thành công. Kiểm tra lại thông tin đăng nhập.";
+        $error = "Password invalid";
+        header("Location:index.php?error=$error");
     }
 }
 ?>
@@ -23,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -45,6 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
+                        <?php
+                                if(isset($_GET['error'])){
+                                    echo "<p style='color:red'>{$_GET['error']}</p>";
+                                }
+                            ?>
                         <button type="submit" class="btn btn-primary">Đăng nhập</button>
                     </form>
                 </div>
