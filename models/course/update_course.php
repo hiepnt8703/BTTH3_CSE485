@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: ../../views/login.php");
+    exit();
+}
 $courseId = isset($_POST['id']) ? $_POST['id'] : '';
 if (empty($courseId)) {
     header("Location: dashboard.php?action=course");

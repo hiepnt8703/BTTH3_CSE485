@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: ../../views/login.php");
+    exit();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Kiểm tra và xử lý dữ liệu gửi từ form
     $title = $_POST["title"];

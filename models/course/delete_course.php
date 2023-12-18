@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: ../../views/login.php");
+    exit();
+}
 require_once '../../config.php';
 
 if (isset($_GET['id'])) {
