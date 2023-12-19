@@ -25,7 +25,7 @@ try {
     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Update the course in the database
-    $sql = "UPDATE courses SET title = ?, description = ? WHERE id = ?";
+    $sql = "UPDATE courses SET `title` = ?, `description` = ? WHERE id = ?";
     $stmt = $connection->prepare($sql);
     $stmt->bindParam(1, $title, PDO::PARAM_STR);
     $stmt->bindParam(2, $description, PDO::PARAM_STR);

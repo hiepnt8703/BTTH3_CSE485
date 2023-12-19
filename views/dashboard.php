@@ -49,6 +49,9 @@ require_once '../models/Lesson.php';
             <!-- Nội dung trang dashboard -->
             <div class="col-md-9">
                 <?php
+                $controller = isset($_GET['controller']) ? $_GET['controller']: 'views';
+                $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
+
                 // Kiểm tra nếu người dùng đã chọn "Course"
                 if (isset($_GET['action']) && $_GET['action'] == 'course') {
                     echo '<h3>Courses</h3>';
@@ -61,9 +64,11 @@ require_once '../models/Lesson.php';
                     $courses = $course->getAll();
                     
                         // Hiển thị danh sách các khóa học
-                        echo '<table class="table">
+                ?>
+                        <table class="table">
                                 <thead>
                                     <tr>
+                                        <th scope="col">ID</th>
                                         <th scope="col">Title</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Created At</th>
@@ -72,34 +77,39 @@ require_once '../models/Lesson.php';
                                         <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
-                            <tbody>';
-
+                            <tbody>
+                        <?php
                                 foreach ($courses as $course) {
-                                    echo '<tr>';
-                                    echo '<td>' . $course['title'] . '</td>';
-                                    echo '<td>' . $course['description'] . '</td>';
-                                    echo '<td>' . $course['created_at'] . '</td>';
-                                    echo '<td>' . $course['updated_at'] . '</td>';
-                                    echo '<td><a href="../models/course/edit_course.php?id=' . $course['id'] . '" class="btn btn-warning">Edit</a></td>';
-                                    echo '<td><a href="../models/course/delete_course.php?id=' . $course['id'] . '" class="btn btn-danger" onclick="return confirmDelete();">Delete</a></td>';
-                                    echo '</tr>';
+                        ?>
+                                    <tr>
+                                    <td><?=$course['id'] ?></td>
+                                    <td><?=$course['title'] ?></td>
+                                    <td> <?=$course['description'] ?></td>
+                                    <td><?=$course['created_at'] ?></td>
+                                    <td><?=$course['updated_at'] ?></td>
+                                    <td><a href="<?=DOMAIN.'/models/course/edit_course.php?id='.$course['id'] ?>" class="btn btn-warning">Edit</a></td>
+                                    <td><a href="<?= DOMAIN.'/models/course/delete_course.php?id='.$course['id'] ?>" class="btn btn-danger" onclick="return confirmDelete();">Delete</a></td>
+                                    </tr>
+                        <?php
                                 }
-
-                            echo '</tbody>
-                            </table>';
-                    
+                        ?>
+                            </tbody>
+                            </table>
+                <?php
                 }
                 if (isset($_GET['action']) && $_GET['action'] == 'lesson') {
                     echo '<h3>Lessons</h3>';
                     echo '<div class="mb-3">
-                            <a href="?action=lesson&subaction=create" class="btn btn-success">Add new Lesson</a>
+                            <a href="../models/lesson/create_lesson.php" class="btn btn-success">Add new Lesson</a>
                         </div>';
                         $lesson = new Lesson();
                         $lessons = $lesson->getAllLessons();
-
-                        echo '<table class="table">
+                ?>
+                        <table class="table">
                                 <thead>
                                     <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Course_ID</th>
                                         <th scope="col">Title</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Created At</th>
@@ -108,21 +118,26 @@ require_once '../models/Lesson.php';
                                         <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
-                                <tbody>';
-
-                        foreach ($lessons as $lesson) {
-                            echo '<tr>';
-                            echo '<td>' . $lesson['title'] . '</td>';
-                            echo '<td>' . $lesson['description'] . '</td>';
-                            echo '<td>' . $lesson['created_at'] . '</td>';
-                            echo '<td>' . $lesson['updated_at'] . '</td>';
-                            echo '<td><a href="?action=lesson&subaction=edit&id=' . $lesson['id'] . '" class="btn btn-warning">Edit</a></td>';
-                            echo '<td><a href="delete_lesson.php?id=' . $lesson['id'] . '" class="btn btn-danger" onclick="return confirmDelete();">Delete</a></td>';
-                            echo '</tr>';
-                        }
-
-                        echo '</tbody>
-                            </table>';
+                                <tbody>
+                    <?php
+                        foreach($lessons as $lesson) {
+                    ?>
+                            <tr>
+                            <td><?=$lesson['id']?></td>
+                            <td><?=$lesson['course_id']?></td>
+                            <td><?=$lesson['title']?></td>
+                            <td><?=$lesson['description']?></td>
+                            <td><?=$lesson['created_at']?></td>
+                            <td><?=$lesson['updated_at']?></td>
+                            <td><a href="<?=DOMAIN.'/models/lesson/edit_lesson.php?id='.$lesson['id'] ?>" class="btn btn-warning">Edit</a></td>
+                            <td><a href="<?= DOMAIN.'/models/lesson/delete_lesson.php?id='.$lesson['id'] ?>" class="btn btn-danger" onclick="return confirmDelete();">Delete</a></td>
+                            </tr>
+                    <?php
+                    }
+                    ?>
+                        </tbody>
+                        </table>
+                <?php
                 }
                 ?>
             </div>
